@@ -45,7 +45,27 @@ const FormControl = () => {
     reset();
     alert("check");
   };
-  console.log(data);
+
+  const handleTabClosing = () => {
+    localFalse();
+  };
+
+  const alertUser = (event) => {
+    event.preventDefault();
+    event.returnValue = "";
+    localStorage.setItem("localCheck", true);
+  };
+
+  const localFalse = () => localStorage.setItem("localCheck", null);
+  React.useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    window.addEventListener("unload", handleTabClosing);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+      window.removeEventListener("unload", handleTabClosing);
+    };
+  });
+
   return (
     <Typography>
       <Typography component={"div"}>
