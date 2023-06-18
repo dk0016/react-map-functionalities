@@ -47,13 +47,27 @@ const Document = () => {
       ).style.transform = `rotate(${rotate}deg)`;
     }
   };
-  React.useEffect(() => {
-    document
-      .getElementById(`imageTrack${page}`)
-      .scrollIntoView({ behavior: "smooth" });
-  }, [page]);
+  const pageTrack = async () => {
+    let observer = await new IntersectionObserver(async (entries) => {
+      var ele = await entries.filter((entry) => entry.isIntersecting);
+      if (ele.length > 0) {
+        ele = ele[0].target;
+        setPage(Number(ele.id.charAt(ele.id.length - 1)));
+      }
+    });
 
-  console.log(rotate);
+    document
+      .querySelectorAll(".test [id^=imageTrack]")
+      .forEach((ele) => observer.observe(ele));
+  };
+  React.useEffect(() => {
+    document.getElementById(`imageTrack${page}`).scrollIntoView();
+    document.getElementById(`imageTracks${page}`).scrollIntoView();
+  }, [page]);
+  React.useEffect(() => {
+    pageTrack();
+  });
+
   return (
     <div
       style={{
@@ -76,6 +90,7 @@ const Document = () => {
             {images.map((data, index) => {
               return (
                 <Box
+                  id={`imageTracks${index + 1}`}
                   key={index}
                   margin={2}
                   sx={{
@@ -97,7 +112,13 @@ const Document = () => {
               );
             })}
           </Grid>
-          <Grid md={10} sm={10} sx={{ maxHeight: "80vh", overflow: "auto" }}>
+          <Grid
+            md={10}
+            sm={10}
+            sx={{ maxHeight: "80vh", overflow: "auto" }}
+            className="test"
+            // onScroll={() => pageTrack()}
+          >
             {images.map((data, index) => {
               return (
                 <Box
@@ -112,6 +133,7 @@ const Document = () => {
                     marginBottom: "100px",
                     marginTop: "100px",
                   }}
+                  onClick={() => rotateFun()}
                 >
                   <img
                     src={data?.imgPath}
