@@ -13,3 +13,20 @@ export const formSchema = Yup.object().shape({
     .required("Mobile Number is required")
     .max(10, "mobile number must not exceed 10 characters"),
 });
+
+export const documentFormSchema = Yup.object().shape({
+  splitInfo: Yup.array().of(
+    Yup.object().shape({
+      isRemoveValidation: Yup.boolean().optional(),
+      sampleCode: Yup.string().when("isRemoveValidation", {
+        is: (isRemoveValidation) => isRemoveValidation,
+        then: Yup.string().required("Sample is required"),
+      }),
+      // scacCode: Yup.string().when("isRemoveValidation", {
+      //   is: (isRemoveValidation) => isRemoveValidation,
+      //   then: Yup.string().required("Scac Code is required"),
+      // }),
+      // invoiceType: Yup.string().optional(),
+    })
+  ),
+});

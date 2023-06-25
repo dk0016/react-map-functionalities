@@ -4,14 +4,16 @@ import App from "../../App";
 import Common from "../Common";
 // import FormControl from "../Form";
 import MultipleFilter from "../MultipleFilter";
-import Document from "../Document";
+import FormValidate from "../FormValidate";
+// import Document from "../Document";
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/accorion" element={<App />} />
         {/* <Route path="/" element={<FormControl />} /> */}
-        <Route path="/" element={<Document />} />
+        {/* <Route path="/" element={<Document />} /> */}
+        <Route path="/" element={<FormValidate />} />
         <Route path="/common" element={<Common />} />
         <Route path="/multiplefilter" element={<MultipleFilter />} />
       </Routes>
