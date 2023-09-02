@@ -50,6 +50,9 @@ const FormValidate = () => {
   const {
     control: documentControl,
     handleSubmit,
+    setValue,
+    getValues,
+    trigger,
     formState: { errors },
   } = useForm({
     criteriaMode: "all",
@@ -64,10 +67,16 @@ const FormValidate = () => {
   const [check, setCheck] = React.useState([]);
   const [test, setTest] = React.useState([]);
 
-  const handleSampleChange = (sampleData, index) => {
-    sample.splice(index, 1, sampleData);
-    setSample(sample);
-    console.log(sample);
+  const handleSampleChange = (sampleData1, index) => {
+    const scacChange = sampleData.map((data) => (data.sample = sampleData1));
+    // sample.splice(index, 1, sampleData);
+    setSample(scacChange);
+    getValues("splitInfo")?.map((data, index) => {
+      console.log(data);
+      setValue(`splitInfo.${index}.sampleCode`, "scacChange");
+      trigger(`splitInfo.${index}.sampleCode`);
+    });
+    // console.log(sample);
   };
   const handleCheckChange = (checkData, index) => {
     check.splice(index, 1, checkData);
@@ -151,6 +160,7 @@ const FormValidate = () => {
                               <TextField
                                 {...params}
                                 placeholder="sample"
+                                defaultValue={data?.sample}
                                 InputProps={{
                                   ...params.InputProps,
                                   type: "search",
@@ -207,7 +217,11 @@ const FormValidate = () => {
         );
       })}
       <Typography>
-        <Button variant="contained" onClick={handleSubmit(formSubmit)}>
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={handleSubmit(formSubmit)}
+        >
           Submit
         </Button>
       </Typography>

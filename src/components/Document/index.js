@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import { Button, Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 const images = [
   {
@@ -48,14 +48,24 @@ const Document = () => {
     }
   };
   const pageTrack = async () => {
-    let observer = await new IntersectionObserver(async (entries) => {
-      var ele = await entries.filter((entry) => entry.isIntersecting);
-      if (ele.length > 0) {
-        ele = ele[0].target;
-        setPage(Number(ele.id.charAt(ele.id.length - 1)));
+    let observer = await new IntersectionObserver(
+      async (entries) => {
+        var ele = await entries.filter((entry) => entry.isIntersecting);
+        if (ele.length > 0) {
+          ele = ele[0].target;
+          setPage(Number(ele.id.charAt(ele.id.length - 1)));
+        }
+      },
+      {
+        root: null,
+        rootMargin: "40px",
+        threshold: 0.8,
       }
-    });
+    );
 
+    document
+      .querySelectorAll(".test1 [id^=track]")
+      .forEach((ele) => observer.observe(ele));
     document
       .querySelectorAll(".test [id^=imageTrack]")
       .forEach((ele) => observer.observe(ele));
@@ -63,95 +73,85 @@ const Document = () => {
   React.useEffect(() => {
     document.getElementById(`imageTrack${page}`).scrollIntoView();
     document.getElementById(`imageTracks${page}`).scrollIntoView();
+    document.getElementById(`track${page}`).scrollIntoView();
   }, [page]);
   React.useEffect(() => {
     pageTrack();
-  });
+  }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "99vw",
-      }}
-    >
-      <div
-        style={{
-          width: "70vw",
-          height: "100%",
-          overflow: "auto",
-          backgroundColor: "#f0abab",
-          borderRadius: "10px",
-        }}
-      >
-        <Grid container sm={12} md={12}>
-          <Grid md={2} sm={2} sx={{ maxHeight: "80vh", overflow: "auto" }}>
-            {images.map((data, index) => {
-              return (
-                <Box
-                  id={`imageTracks${index + 1}`}
-                  key={index}
-                  margin={2}
-                  sx={{
-                    width: 100,
-                    height: 100,
-                    display: "flex",
-                    flexDirection: "column",
-                    border: page === index + 1 && "3px solid red",
-                    boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.06)",
-                  }}
-                  onClick={() => navPage(index + 1)}
-                >
-                  <img
-                    src={data?.imgPath}
-                    alt="no"
-                    style={{ height: "100%" }}
-                  />
-                </Box>
-              );
-            })}
+    <Grid container style={{ height: "100vh", width: "100vw" }}>
+      <Grid item md={8} style={{ height: "100%" }}>
+        <Grid container style={{ height: "100%" }}>
+          <Grid
+            item
+            md={3}
+            sm={3}
+            style={{ maxHeight: "100%", overflow: "auto" }}
+          >
+            {images.map((data, index) => (
+              <Box
+                id={`imageTracks${index + 1}`}
+                key={index}
+                margin={2}
+                sx={{
+                  width: 100,
+                  height: 100,
+                  display: "flex",
+                  flexDirection: "column",
+                  border: page === index + 1 && "3px solid red",
+                  boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.06)",
+                }}
+                onClick={() => navPage(index + 1)}
+              >
+                <img src={data?.imgPath} alt="no" style={{ height: "100%" }} />
+              </Box>
+            ))}
           </Grid>
           <Grid
-            md={10}
-            sm={10}
-            sx={{ maxHeight: "80vh", overflow: "auto" }}
+            item
+            md={9}
+            sm={9}
+            style={{ maxHeight: "100%", overflow: "auto" }}
             className="test"
-            // onScroll={() => pageTrack()}
           >
-            {images.map((data, index) => {
-              return (
-                <Box
-                  id={`imageTrack${index + 1}`}
-                  key={index}
-                  margin={2}
-                  sx={{
-                    width: 700,
-                    height: 550,
-                    display: "flex",
-                    flexDirection: "column",
-                    marginBottom: "100px",
-                    marginTop: "100px",
-                  }}
-                  onClick={() => rotateFun()}
-                >
-                  <img
-                    src={data?.imgPath}
-                    alt="no"
-                    style={{ height: "100%" }}
-                  />
-                </Box>
-              );
-            })}
+            {images.map((data, index) => (
+              <Box
+                id={`imageTrack${index + 1}`}
+                key={index}
+                margin={2}
+                sx={{
+                  width: 700,
+                  height: 550,
+                  display: "flex",
+                  flexDirection: "column",
+                  marginBottom: "100px",
+                  marginTop: "100px",
+                }}
+                onClick={() => rotateFun()}
+              >
+                <img src={data?.imgPath} alt="no" style={{ height: "100%" }} />
+              </Box>
+            ))}
           </Grid>
         </Grid>
-      </div>
-      <div>
-        <Button variant="contained" onClick={() => rotateFun()}>
-          Rotate
-        </Button>
-      </div>
-    </div>
+      </Grid>
+      <Grid
+        item
+        md={4}
+        style={{ maxHeight: "400px", overflow: "auto" }}
+        className="test1"
+      >
+        {images.map((data, ind) => (
+          <Typography
+            id={`track${ind + 1}`}
+            sx={{ minHeight: "200px", backgroundColor: "grey" }}
+          >
+            <h1>hello world {ind + 1}</h1>
+          </Typography>
+        ))}
+      </Grid>
+    </Grid>
   );
 };
 

@@ -17,11 +17,12 @@ export const formSchema = Yup.object().shape({
 export const documentFormSchema = Yup.object().shape({
   splitInfo: Yup.array().of(
     Yup.object().shape({
-      isRemoveValidation: Yup.boolean().optional(),
-      sampleCode: Yup.string().when("isRemoveValidation", {
-        is: (isRemoveValidation) => isRemoveValidation,
-        then: Yup.string().required("Sample is required"),
-      }),
+      sampleCode: Yup.string().required("sjkfhjkhsf"),
+      // isRemoveValidation: Yup.boolean().optional(),
+      // sampleCode: Yup.string().when("isRemoveValidation", {
+      //   is: (isRemoveValidation) => isRemoveValidation,
+      //   then: Yup.string().required("Sample is required"),
+      // }),
       // scacCode: Yup.string().when("isRemoveValidation", {
       //   is: (isRemoveValidation) => isRemoveValidation,
       //   then: Yup.string().required("Scac Code is required"),
