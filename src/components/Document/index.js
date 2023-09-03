@@ -64,21 +64,46 @@ const Document = () => {
     );
 
     document
-      .querySelectorAll(".test1 [id^=track]")
-      .forEach((ele) => observer.observe(ele));
-    document
       .querySelectorAll(".test [id^=imageTrack]")
       .forEach((ele) => observer.observe(ele));
   };
+
   React.useEffect(() => {
-    document.getElementById(`imageTrack${page}`).scrollIntoView();
-    document.getElementById(`imageTracks${page}`).scrollIntoView();
-    document.getElementById(`track${page}`).scrollIntoView();
+    document
+      .getElementById(
+        `imageTrack${page > 0 && page <= images?.length ? page : 1}`
+      )
+      .scrollIntoView();
+    document
+      .getElementById(
+        `imageTracks${page > 0 && page <= images?.length ? page : 1}`
+      )
+      .scrollIntoView();
+    document
+      .getElementById(`track${page > 0 && page <= images?.length ? page : 1}`)
+      .scrollIntoView();
   }, [page]);
   React.useEffect(() => {
     pageTrack();
   }, []);
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowDown") {
+        setPage((pre) => (pre > 0 && pre <= images?.length ? pre + 1 : 1));
+      } else if (event.key === "ArrowUp") {
+        setPage((pre) =>
+          pre > 0 && pre <= images?.length ? pre - 1 : images?.length
+        );
+      }
+    };
 
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   return (
     <Grid container style={{ height: "100vh", width: "100vw" }}>
       <Grid item md={8} style={{ height: "100%" }}>
@@ -139,13 +164,13 @@ const Document = () => {
       <Grid
         item
         md={4}
-        style={{ maxHeight: "400px", overflow: "auto" }}
+        style={{ maxHeight: "100px", overflow: "auto" }}
         className="test1"
       >
         {images.map((data, ind) => (
           <Typography
             id={`track${ind + 1}`}
-            sx={{ minHeight: "200px", backgroundColor: "grey" }}
+            sx={{ minHeight: "30px", backgroundColor: "grey" }}
           >
             <h1>hello world {ind + 1}</h1>
           </Typography>
